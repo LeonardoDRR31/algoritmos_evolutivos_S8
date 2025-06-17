@@ -91,6 +91,3 @@
 - La representación real proporciona una solución robusta y probabilística, con una buena distribución de varianzas y rangos de notas, aunque su mejora en fitness es más lenta y se estabiliza después de 30 generaciones.  
 - En términos prácticos, la representación permutacional ofrece una mejor relación entre calidad de solución y velocidad de convergencia, mientras que la representación real permite modelar la incertidumbre y puede ser más flexible en casos más complejos.
 
----
-
-Si quieres puedo ayudarte también a crear un README.md o agregar instrucciones para que tu repo quede impecable. ¿Quieres?
