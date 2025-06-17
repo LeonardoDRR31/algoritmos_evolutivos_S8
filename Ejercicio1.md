@@ -1,63 +1,96 @@
-# Análisis Comparativo de Representaciones Genéticas
-
-## Introducción
-
-Se evaluaron tres tipos de representaciones para resolver el problema de distribuir 39 alumnos en 3 exámenes (A, B, C) de forma equitativa y balanceada en promedio de notas. Las representaciones son:
-
-- Representación Binaria
-- Representación Permutacional
-- Representación Real (valores continuos)
+# Análisis Comparativo de Representaciones para Distribución de Alumnos
 
 ---
 
-## Resultados resumidos
+## Representación Binaria
 
-| Representación      | Equilibrio en grupos | Desviación estándar entre promedios | Convergencia (generaciones) | Observaciones principales                           |
-|--------------------|----------------------|-------------------------------------|-----------------------------|----------------------------------------------------|
-| Binaria            | No exacto (12,13,14) | 0.4119                              | Nula mejora en 80 generaciones | Estancamiento, penalización constante, poco eficiente |
-| Permutacional      | Exacto (13,13,13)    | 0.0363                              | Mejora constante, ~40 gen    | Muy buena solución, buen balance y diversidad       |
-| Real               | Exacto (13,13,13)    | 0.0363                              | Rápida (~30 generaciones)    | Mejor control estadístico, solución más robusta     |
+- **Problema:** Distribuir 39 alumnos en 3 exámenes (A, B, C) de forma equitativa  
+- **Cromosoma:** 117 bits (39 alumnos × 3 bits cada uno)  
+- **Gen ejemplo:** `[0,1,0]` significa alumno asignado a examen B  
 
----
+### Evolución del fitness:
+| Generación | Mejor fitness  |
+|------------|---------------|
+| 0          | -1000.0000    |
+| 20         | -1000.0000    |
+| 40         | -1000.0000    |
+| 60         | -1000.0000    |
+| 80         | -1000.0000    |
 
-## Conclusión Detallada
+### Distribución final:
+| Examen | Alumnos | Promedio |
+|--------|---------|----------|
+| A      | 13      | 15.92    |
+| B      | 12      | 14.92    |
+| C      | 14      | 15.36    |
 
-### Representación Real – La más robusta y precisa
-
-- Usa pesos reales normalizados para asignar alumnos a exámenes.
-- Permite flexibilidad y exploración continua del espacio de soluciones.
-- Logra equilibrio exacto en número de alumnos y minimiza la desviación entre promedios.
-- Controla la varianza interna en los grupos, favoreciendo homogeneidad.
-- Converge rápido y evita estancamientos.
-- Ideal para problemas donde se busca alta precisión y control.
-
-### Representación Permutacional – Eficiente y equilibrada
-
-- Cromosoma representa una permutación de alumnos asignados en secuencia.
-- Mantiene equilibrio exacto en tamaño de grupos.
-- Ofrece desviación estándar baja, comparable a la representación real.
-- Puede incluir incentivos para diversidad interna.
-- Mejora progresivamente el fitness.
-- Simple de implementar y eficiente para problemas de partición.
-
-### Representación Binaria – Ineficiente para este problema
-
-- Representa asignaciones explícitas con bits.
-- No mantiene equilibrio automático, causando penalizaciones por tamaños desiguales.
-- No mostró mejora en fitness durante las generaciones evaluadas.
-- Sensible a mutaciones aleatorias, exploración poco efectiva.
-- Requiere restricciones adicionales para equilibrar grupos, aumentando complejidad.
+- **Verificación de equilibrio:**  
+  Desviación estándar entre promedios: **0.4119**
 
 ---
 
-## Recomendaciones
+## Representación Permutacional
 
-- **Usar representación real** para obtener soluciones precisas y controladas estadísticamente.
-- **Usar representación permutacional** para un enfoque sencillo y eficiente cuando el orden y equilibrio son importantes.
-- Evitar la representación binaria a menos que se implementen mecanismos complejos para mantener el equilibrio.
+- **Problema:** Secuenciar alumnos para asignación ordenada a exámenes  
+- **Cromosoma:** Permutación de 39 índices de alumnos  
+- **Decodificación:** Posiciones [0-12] → Examen A, [13-25] → Examen B, [26-38] → Examen C  
+
+### Evolución del fitness:
+| Generación | Mejor fitness |
+|------------|--------------|
+| 0          | 0.2275       |
+| 10         | 0.2275       |
+| 20         | 0.2637       |
+| 30         | 0.2637       |
+| 40         | 0.2637       |
+
+### Distribución final:
+| Examen | Alumnos | Promedio |
+|--------|---------|----------|
+| A      | 13      | 15.38    |
+| B      | 13      | 15.46    |
+| C      | 13      | 15.38    |
+
+- **Desviación estándar entre promedios:** **0.0363**  
+- **Mejora total del fitness:** 15.9% (de 0.2275 a 0.2637)
 
 ---
 
-## Referencias
+## Representación Real
 
-- Implementaciones y resultados basados en el problema de distribución de alumnos para exámenes usando algoritmos genéticos.
+- **Problema:** Optimizar distribución de alumnos usando pesos probabilísticos  
+- **Cromosoma:** 117 valores reales (39 alumnos × 3 pesos normalizados)  
+- **Gen ejemplo:** `[0.2, 0.5, 0.3]` representa probabilidades para exámenes A, B, C  
+
+### Evolución del fitness:
+| Generación | Mejor fitness |
+|------------|--------------|
+| 0          | -1.1840      |
+| 30         | -1.0911      |
+| 60         | -1.0911      |
+| 90         | -1.0911      |
+| 120        | -1.0911      |
+
+### Distribución optimizada:
+| Examen | Alumnos | Promedio | Varianza | Rango de notas |
+|--------|---------|----------|----------|----------------|
+| A      | 13      | 15.38    | 9.47     | [11 - 20]      |
+| B      | 13      | 15.46    | 12.71    | [9 - 20]       |
+| C      | 13      | 15.38    | 9.47     | [10 - 20]      |
+
+- **Desviación estándar entre promedios:** **0.0363**  
+- **Diferencia máxima entre promedios:** 0.08
+
+---
+
+## Conclusión
+
+- La **representación permutacional** y la **representación real** logran un equilibrio mucho mejor entre los grupos, reflejado en una desviación estándar entre promedios muy baja (**0.0363**) en comparación con la representación binaria (**0.4119**).  
+- La representación binaria muestra poca evolución en el fitness a lo largo de las generaciones, permaneciendo constante en un valor muy bajo (-1000), lo que indica dificultades para encontrar una buena solución.  
+- La representación permutacional converge más rápido y muestra una mejora notable (15.9%) en el fitness en menos generaciones (20-40 generaciones).  
+- La representación real proporciona una solución robusta y probabilística, con una buena distribución de varianzas y rangos de notas, aunque su mejora en fitness es más lenta y se estabiliza después de 30 generaciones.  
+- En términos prácticos, la representación permutacional ofrece una mejor relación entre calidad de solución y velocidad de convergencia, mientras que la representación real permite modelar la incertidumbre y puede ser más flexible en casos más complejos.
+
+---
+
+Si quieres puedo ayudarte también a crear un README.md o agregar instrucciones para que tu repo quede impecable. ¿Quieres?
